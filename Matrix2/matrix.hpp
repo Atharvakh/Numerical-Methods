@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+using namespace std;
 
 class Matrix
 {
@@ -25,8 +26,9 @@ public:
     bool isidentity() const;  // Identity matrix check
     bool isSymmetric() const; // Symmetry check
     Matrix Augment() const;   // Augment matrix
+    double Determinant() const;
     Matrix Gauss_Elimination();
-    void LU_Decomposition(Matrix &L, Matrix &U) const;
+    void LU_Decomposition(Matrix &L, Matrix &U) const; // Dolittle's
     void Cholesky_Decomposition();
     bool isDiagonallyDominant() const;
     Matrix Gauss_Seidel(int maxIterations = 100, double tolerance = 0.000001);

@@ -1,0 +1,40 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+float f(float x) {
+    return x * log10(x) - 1.2;
+}
+
+float df(float x) {
+    return log10(x) + 0.43429;
+}
+
+int main() {
+    int itr, maxitr;
+    float h, x0, x1, tol;
+
+    std::cout << "Enter x0, tolerance, maximum iterations: ";
+    std::cin >> x0 >> tol >> maxitr;
+
+    std::cout << std::fixed;
+
+    for (itr = 1; itr <= maxitr; itr++) {
+        h = f(x0) / df(x0);
+        x1 = x0 - h;
+        
+        std::cout << "Iteration number" << std::setw(6) << itr << " X = " 
+                  << std::setw(6) << std::setprecision(6) << x1 << std::endl;
+
+        if (std::fabs(h) < tol) {
+            std::cout << "After " << std::setw(3) << itr << " iterations, root = " 
+                      << std::setw(7) << std::setprecision(6) << x1 << std::endl;
+            return 0;
+        }
+
+        x0 = x1;
+    }
+
+    std::cout << "Iterations not sufficient, solution does not converge." << std::endl;
+    return 1;
+}

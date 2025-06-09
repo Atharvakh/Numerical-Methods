@@ -1,5 +1,4 @@
 #include "matrix.hpp"
-#include <iostream>
 #include <fstream>
 #include <stdexcept>
 
@@ -25,12 +24,12 @@ Matrix::~Matrix()
     delete[] mat;
 }
 
-Matrix::Matrix(const std::string &filename)
+Matrix::Matrix(const string &filename)
 {
-    std::ifstream file(filename);
+    ifstream file(filename);
     if (!file.is_open())
     {
-        throw std::runtime_error("Unable to open file.");
+        throw runtime_error("Unable to open file.");
     }
 
     file >> rows >> cols;
@@ -46,7 +45,7 @@ Matrix::Matrix(const std::string &filename)
     file.close();
 }
 
-Matrix::Matrix(const Matrix &m) : rows(m.rows), cols(m.cols)
+Matrix::Matrix(const Matrix &m) : rows(m.rows), cols(m.cols) // copy constructor definition
 {
     mat = new double *[rows];
     for (int i = 0; i < rows; ++i)
@@ -64,9 +63,9 @@ void Matrix::Display() const
     {
         for (int j = 0; j < cols; ++j)
         {
-            std::cout << mat[i][j] << " ";
+            cout << mat[i][j] << " ";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 }
 Matrix &Matrix::operator=(const Matrix &m)

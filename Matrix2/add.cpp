@@ -1,4 +1,3 @@
-#include <iostream>
 #include "matrix.hpp"
 #include "iomanip"
 #ifdef _WIN32
@@ -7,13 +6,12 @@
 #include <fstream>
 #include <vector>
 #include <math.h>
-using namespace std;
 
-Matrix Matrix::Add(const Matrix &m) const
+Matrix Matrix::Add(const Matrix &m) const // only change Add to "operator +" to use + sign in main
 {
     if (this->rows != m.rows || this->cols != m.cols)
     {
-        throw std::runtime_error("Matrix dimensions do not match for addition.");
+        throw runtime_error("Matrix dimensions do not match for addition.");
     }
 
     Matrix result(this->rows, this->cols);
@@ -31,7 +29,7 @@ Matrix Matrix::Subtract(const Matrix &m) const
 {
     if (this->rows != m.rows || this->cols != m.cols)
     {
-        throw std::runtime_error("Matrix dimensions do not match for subtraction.");
+        throw runtime_error("Matrix dimensions do not match for subtraction.");
     }
 
     Matrix result(this->rows, this->cols);
@@ -49,7 +47,7 @@ Matrix Matrix::Multiply(const Matrix &m) const
 {
     if (this->cols != m.rows)
     {
-        throw std::runtime_error("Matrix dimensions do not allow multiplication.");
+        throw runtime_error("Matrix dimensions do not allow multiplication.");
     }
 
     Matrix result(this->rows, m.cols);
@@ -103,13 +101,13 @@ bool Matrix::isSymmetric() const
     return true;
 }
 
-Matrix::Matrix(const std::string &filename1, const std::string &filename2)
+Matrix::Matrix(const string &filename1, const string &filename2)
 {
-    std::ifstream file1(filename1);
-    std::ifstream file2(filename2);
+    ifstream file1(filename1);
+    ifstream file2(filename2);
     if (!file1.is_open() || !file2.is_open())
     {
-        throw std::runtime_error("Unable to open file(s).");
+        throw runtime_error("Unable to open file(s).");
     }
     int r, c;
     file1 >> r >> c;
@@ -139,7 +137,7 @@ Matrix Matrix::Gauss_Elimination()
 {
     if (cols != rows + 1)
     {
-        throw std::runtime_error("Matrix must be augmented (cols = rows + 1) for Gaussian elimination.");
+        throw runtime_error("Matrix must be augmented (cols = rows + 1) for Gaussian elimination.");
     }
 
     Matrix result(*this);
@@ -155,7 +153,7 @@ Matrix Matrix::Gauss_Elimination()
             {
                 if (result.mat[k][m] != 0)
                 {
-                    std::swap(result.mat[m], result.mat[k]);
+                    swap(result.mat[m], result.mat[k]);
                     break;
                 }
             }
@@ -164,7 +162,7 @@ Matrix Matrix::Gauss_Elimination()
         double pivot = result.mat[m][m];
         if (pivot == 0)
         {
-            throw std::runtime_error("Error: Zero pivot encountered after row swaps, cannot proceed.");
+            throw runtime_error("Error: Zero pivot encountered after row swaps, cannot proceed.");
         }
 
         // Normalize the pivot row
@@ -202,6 +200,8 @@ Matrix Matrix::Gauss_Elimination()
         }
     }
 
+    // solution.Display();
+
     return solution;
 }
 
@@ -209,7 +209,7 @@ void Matrix::LU_Decomposition(Matrix &L, Matrix &U) const
 {
     if (this->rows != this->cols)
     {
-        throw std::runtime_error("LU decomposition requires a square matrix.");
+        throw runtime_error("LU decomposition requires a square matrix.");
     }
     int n = this->rows;
     L = Matrix(n, n);
@@ -248,7 +248,7 @@ void Matrix::LU_Decomposition(Matrix &L, Matrix &U) const
             U.mat[j][i] = this->mat[j][i];
             for (int k = 0; k < j; ++k)
             {
-                U.mat[j][i] -= L.mat[j][k] * U.mat[k][i];
+                U.mat[j][i] -= L.mat[j][k] * U.mat[k][i]; // main logic
             }
         }
 
@@ -259,16 +259,21 @@ void Matrix::LU_Decomposition(Matrix &L, Matrix &U) const
 
             if (U.mat[j][j] == 0.0)
             {
-                throw std::runtime_error("Singular matrix detected.");
+                throw runtime_error("Singular matrix detected.");
             }
             L.mat[i][j] = this->mat[i][j];
             for (int k = 0; k < j; ++k)
             {
-                L.mat[i][j] -= L.mat[i][k] * U.mat[k][j];
+                L.mat[i][j] -= L.mat[i][k] * U.mat[k][j]; // main logic
             }
             L.mat[i][j] /= U.mat[j][j];
         }
     }
+    // double determinant = 0;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     determinant *= U.mat[i][i];
+    // }
 }
 
 void Matrix::Cholesky_Decomposition()
@@ -276,11 +281,11 @@ void Matrix::Cholesky_Decomposition()
     this->Display();
     if (this->rows != this->cols)
     {
-        throw std::runtime_error("Cholesky decomposition requires a symmetric, positive-definite matrix.");
+        throw runtime_error("Cholesky decomposition requires a symmetric, positive-definite matrix.");
     }
     if (!isSymmetric())
     {
-        throw std::runtime_error("Matrix is not symmetric.");
+        throw runtime_error("Matrix is not symmetric.");
     }
 
     int n = this->rows;
@@ -322,11 +327,11 @@ bool Matrix::isDiagonallyDominant() const
         {
             if (i != j)
             {
-                sum += std::fabs(mat[i][j]); // Sum of non-diagonal elements
+                sum += fabs(mat[i][j]); // Sum of non-diagonal elements
             }
         }
 
-        if (std::fabs(mat[i][i]) < sum)
+        if (fabs(mat[i][i]) < sum)
         {
             return false; // Not diagonally dominant
         }
@@ -338,13 +343,13 @@ Matrix Matrix::Gauss_Seidel(int maxIterations, double tolerance)
 {
     if (cols != rows + 1)
     {
-        throw std::runtime_error("Matrix must be augmented (cols = rows + 1) for Gauss-Seidel.");
+        throw runtime_error("Matrix must be augmented (cols = rows + 1) for Gauss-Seidel.");
     }
 
     // Ensure the matrix is diagonally dominant
     // if (!isDiagonallyDominant())
     // {
-    //     std::cout << "Matrix is not diagonally dominant." << std::endl;
+    //     cout << "Matrix is not diagonally dominant." << endl;
     //     return -1;
     // }
 
@@ -380,12 +385,12 @@ Matrix Matrix::Gauss_Seidel(int maxIterations, double tolerance)
         double maxDiff = 0.0;
         for (int i = 0; i < rows; i++)
         {
-            maxDiff = std::max(maxDiff, std::fabs(x.mat[i][0] - old_x.mat[i][0]));
+            maxDiff = max(maxDiff, fabs(x.mat[i][0] - old_x.mat[i][0]));
         }
 
         if (maxDiff < tolerance)
         {
-            std::cout << "Gauss-Seidel Converged in " << iter + 1 << " iterations.\n";
+            cout << "Gauss-Seidel Converged in " << iter + 1 << " iterations.\n";
             return x;
         }
 
@@ -397,13 +402,13 @@ Matrix Matrix::Gauss_Jacobi(int maxIterations, double tolerance)
 {
     if (cols != rows + 1)
     {
-        throw std::runtime_error("Matrix must be augmented (cols = rows + 1) for Gauss-Seidel.");
+        throw runtime_error("Matrix must be augmented (cols = rows + 1) for Gauss-Seidel.");
     }
 
     // Ensure the matrix is diagonally dominant
     // if (!isDiagonallyDominant())
     // {
-    //     std::cout << "Matrix is not diagonally dominant." << std::endl;
+    //     cout << "Matrix is not diagonally dominant." << endl;
     // }
 
     // Solution vector as a single-column matrix
@@ -438,15 +443,40 @@ Matrix Matrix::Gauss_Jacobi(int maxIterations, double tolerance)
         double maxDiff = 0.0;
         for (int i = 0; i < rows; i++)
         {
-            maxDiff = std::max(maxDiff, std::fabs(x.mat[i][0] - old_x.mat[i][0]));
+            maxDiff = max(maxDiff, fabs(x.mat[i][0] - old_x.mat[i][0]));
         }
 
         if (maxDiff < tolerance)
         {
-            std::cout << "Gauss_Jacobi Converged in " << iter + 1 << " iterations.\n";
+            cout << "Gauss_Jacobi Converged in " << iter + 1 << " iterations.\n";
             return x;
         }
 
         old_x = x; // Store new values for next iteration
     }
+}
+double Matrix::Determinant() const
+{
+    if (rows != cols)
+    {
+        throw runtime_error("Determinant requires square matrix");
+    }
+
+    // For 1x1 and 2x2 matrices (simple cases)
+    if (rows == 1)
+        return mat[0][0];
+    if (rows == 2)
+        return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
+
+    Matrix L(rows, cols), U(rows, cols);
+    LU_Decomposition(L, U); // Use existing LU decomposition
+
+    // Determinant is product of U's diagonal elements
+    double det = 1.0;
+    for (int i = 0; i < rows; ++i)
+    {
+        det *= U.mat[i][i];
+    }
+
+    return det;
 }

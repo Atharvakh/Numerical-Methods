@@ -13,11 +13,7 @@ double Complex::getImag() const
 {
     return imag;
 }
-void Complex::set(const double x, const double y)
-{
-    real = x;
-    imag = y;
-}
+
 Complex Complex::operator+(const Complex &c) const
 {
     return Complex(real + c.getReal(), imag + c.getImag());

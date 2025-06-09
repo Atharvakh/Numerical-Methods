@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+std::string binaryToDecimal(const std::string& binary, int recurringStart, int recurringLength) {
+    std::string nonRecurring = binary.substr(0, recurringStart);
+    std::string recurring = binary.substr(recurringStart, recurringLength);
+
+    double nonRecurringDecimal = 0;
+    double recurringDecimal = 0;
+    double denominator = 1;
+
+    // Convert non-recurring part to decimal
+    for (int i = 0; i < nonRecurring.length(); ++i) {
+        nonRecurringDecimal += (nonRecurring[i] - '0') * std::pow(2, nonRecurring.length() - i - 1);
+    }
+
+    // Convert recurring part to decimal
+    for (int i = 0; i < recurring.length(); ++i) {
+        recurringDecimal += (recurring[i] - '0') * std::pow(2, recurring.length() - i - 1);
+        denominator *= 2;
+    }
+    recurringDecimal /= (denominator - 1);
+
+    // Combine non-recurring and recurring parts
+    double result = nonRecurringDecimal + recurringDecimal;
+    return std::to_string(result);
+}
+
+int main() {
+    std::string binary = "10101(01)";
+    int recurringStart = 5; // Index where the recurring part starts
+    int recurringLength = 2; // Length of the recurring part
+
+    std::string decimal = binaryToDecimal(binary, recurringStart, recurringLength);
+    std::cout << "The recurring binary number " << binary << " is " << decimal << " in decimal." << std::endl;
+    return 0;
+}

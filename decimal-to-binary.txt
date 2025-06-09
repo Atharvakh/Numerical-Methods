@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+std::string decimalToBinary(double decimal) {
+    std::string binary = "";
+    int integerPart = static_cast<int>(decimal);
+    double fractionalPart = decimal - integerPart;
+
+    // Convert integer part to binary
+    while (integerPart > 0) {
+        binary = std::to_string(integerPart % 2) + binary;
+        integerPart /= 2;
+    }
+
+    // Convert fractional part to binary
+    if (fractionalPart > 0) {
+        binary += ".";
+        while (fractionalPart > 0 && binary.length() < 32) { // Limit to 32 bits for fractional part
+            fractionalPart *= 2;
+            if (fractionalPart >= 1) {
+                binary += "1";
+                fractionalPart -= 1;
+            } else {
+                binary += "0";
+            }
+        }
+    }
+
+    return binary;
+}
+
+int main() {
+    double decimal;
+    std::cout << "Enter a decimal number: ";
+    std::cin >> decimal;
+    std::string binary = decimalToBinary(decimal);
+    std::cout << "Binary representation: " << binary << std::endl;
+    return 0;
+}

@@ -1,0 +1,79 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+double f(double x) {
+    return (x * x * x - 4 * x - 9);
+}
+
+void bisect(float *x, float a, float b, int *itr) {
+    *x = (a + b) / 2;
+    ++(*itr);
+    cout << "Iteration no." << setw(3) << *itr << " X = " << setw(7) << setprecision(5) << *x << endl;
+}
+
+int main() {
+    int itr = 0, maxitr;
+    float x, a, b, aerr, x1;
+
+    cout << "Enter the values of a and b, allowed error, and maximum iterations:" << endl;
+    cin >> a >> b >> aerr >> maxitr;
+
+    cout << fixed;
+
+    if (f(a) * f(b) > 0) {
+        cout << "The function does not change signs at the ends of the interval. No root can be guaranteed!" << endl;
+        return 1;
+    }
+
+    bisect(&x, a, b, &itr);
+
+    do {
+        if (f(a) * f(x) < 0) {
+            b = x;
+        } else {
+            a = x;
+        }
+
+        bisect(&x1, a, b, &itr);
+
+        if (fabs(x1 - x) < aerr) {
+            cout << "After " << itr << " iterations, the root is: " << setw(6) << setprecision(4) << x1 << endl;
+            return 0;
+        }
+
+        x = x1;
+
+    } while (itr < maxitr);
+
+    cout << "Solution does not converge, iterations not sufficient" << endl;
+    return 1;
+}
+
+
+
+double func(double x) {
+    return x * x - 4; // Example function: x^2 - 4
+}
+
+// Bisection method
+double bisection(double a, double b, double tol) {
+    if (func(a) * func(b) >= 0) {
+        std::cerr << "Error: f(a) and f(b) must have opposite signs." << std::endl;
+        return 0;
+    }
+
+    while ((b - a) / 2 > tol) {
+        double c = (a + b) / 2;
+        if (func(c) == 0) {
+            return c;
+        } else if (func(c) * func(a) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+    }
+    return (a + b) / 2;
+}

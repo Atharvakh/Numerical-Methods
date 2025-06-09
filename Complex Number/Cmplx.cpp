@@ -3,8 +3,8 @@ using namespace std;
 int main()
 {
     // Create
-    Complex c1(5.0, 4.0); // 3 + 4i
-    Complex c2(6.0, 2.0); // 1 + 2i
+    Complex c1(5.0, 4.0); // 5 + 4i
+    Complex c2(6.0, 2.0); // 6 + 2i
     cout << "Complex Number 1: " << c1;
     cout << "Complex Number 2: " << c2;
 

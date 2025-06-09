@@ -1,0 +1,34 @@
+void Matrix::makeDiagonallyDominant()
+{
+    for (int i = 0; i < rows; i++)
+    {
+        int bestRow = i;
+        double maxValue = std::fabs(mat[i][i]);
+
+        // Find the row with the largest absolute diagonal element
+        for (int k = i + 1; k < rows; k++)
+        {
+            if (std::fabs(mat[k][i]) > maxValue)
+            {
+                maxValue = std::fabs(mat[k][i]);
+                bestRow = k;
+            }
+        }
+
+        // Swap if a better row is found
+        if (bestRow != i)
+        {
+            std::swap(mat[i], mat[bestRow]);
+        }
+    }
+
+    // Final check if diagonal dominance is achieved
+    if (!isDiagonallyDominant())
+    {
+        throw std::runtime_error("Cannot make the matrix diagonally dominant.");
+    }
+    else
+    {
+        std::cout << "Matrix made diagonally dominant." << std::endl;
+    }
+}
